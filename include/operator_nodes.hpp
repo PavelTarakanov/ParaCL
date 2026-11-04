@@ -21,7 +21,7 @@ enum class BinaryOpType {
     GreaterEq // >=
 };
 
-// Вычислительные бинарные операции
+// Computational binary operations
 class BinaryOpNode final : public Node {
 private:
     BinaryOpType op_;
@@ -57,7 +57,7 @@ public:
     }
 };
 
-// Оператор присваивания (x = expr)
+// Assignment operator (x = expr)
 class AssignNode final : public Node {
 private:
     std::size_t var_id_;
@@ -74,7 +74,7 @@ public:
     }
 };
 
-// Оператор вывода в поток (print expr)
+// Output operator to stream (print expr)
 class PrintNode final : public Node {
 private:
     NodePtr expr_;
@@ -89,7 +89,7 @@ public:
     }
 };
 
-// Оператор ввода со стандартного потока (?)
+// Input operator from standard stream (?)
 class ReadNode final : public Node {
 public:
     int eval(ExecutionContext& /*ctx*/) const override {

@@ -5,7 +5,7 @@
 
 namespace paracl {
 
-// Узел-число (константа)
+// Number node (constant)
 class NumberNode final : public Node {
 private:
     int value_;
@@ -13,12 +13,12 @@ private:
 public:
     explicit NumberNode(int val) : value_(val) {}
 
-    int eval(ExecutionContext&) const override {
+    int eval(ExecutionContext& /*ctx*/) const override {
         return value_;
     }
 };
 
-// Узел-переменная (хранит индекс в массиве контекста)
+// Variable node (stores an index in the context array)
 class VariableNode final : public Node {
 private:
     std::size_t var_id_;

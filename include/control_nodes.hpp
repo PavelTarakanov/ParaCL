@@ -7,7 +7,7 @@
 
 namespace paracl {
 
-// Составной узел (блок последовательных инструкций { stmt1; stmt2; })
+// Compound node (block of sequential statements { stmt1; stmt2; })
 class BlockNode final : public Node {
 private:
     std::vector<NodePtr> stmts_;
@@ -30,12 +30,12 @@ public:
     }
 };
 
-// Условный оператор if (cond) { then } else { else }
+// Conditional statement if (cond) { then } else { else }
 class IfNode final : public Node {
 private:
     NodePtr cond_;
     NodePtr then_branch_;
-    NodePtr else_branch_; // Может быть nullptr
+    NodePtr else_branch_; // Can be nullptr
 
 public:
     IfNode(NodePtr cond, NodePtr then_b, NodePtr else_b = nullptr)
@@ -53,7 +53,7 @@ public:
     }
 };
 
-// Цикл while (cond) { body }
+// While loop while (cond) { body }
 class WhileNode final : public Node {
 private:
     NodePtr cond_;

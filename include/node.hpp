@@ -8,7 +8,7 @@
 
 namespace paracl {
 
-// Контекст исполнения: хранит значения всех переменных по их числовому индексу
+// Execution context: stores the values of all variables by their numerical index
 struct ExecutionContext {
     std::vector<int> variables;
 
@@ -27,12 +27,12 @@ struct ExecutionContext {
     }
 };
 
-// Базовый абстрактный класс узла AST
+// Abstract base class for an AST node
 class Node {
 public:
-    virtual ~Node() = default; // Обязательный виртуальный деструктор (RAII)
+    virtual ~Node() = default; // Mandatory virtual destructor (RAII)
 
-    // Чисто виртуальный метод для вычисления/выполнения узла
+    // Pure virtual method to evaluate/execute the node
     virtual int eval(ExecutionContext& ctx) const = 0;
 };
 

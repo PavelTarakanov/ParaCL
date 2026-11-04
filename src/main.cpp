@@ -1,12 +1,13 @@
-#include "../include/node.hpp"
-#include "../include/leaf_nodes.hpp"
-#include "../include/operator_nodes.hpp"
-#include "../include/control_nodes.hpp"
+#include "lexer.hpp"
 #include <iostream>
 
-using namespace paracl;
-
 int main() {
+    std::string code = "iters = ?; while (iters > 0) { print iters; }";
+    paracl::Lexer lexer(code);
+    auto tokens = lexer.tokenize();
 
+    for (const auto& token : tokens) {
+        std::cout << "Token text: '" << token.text << "'\n";
+    }
     return 0;
 }
