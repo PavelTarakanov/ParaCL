@@ -1,0 +1,13 @@
+build/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+
+out
+*.o
+*.d
+
+.DS_Store
+.vscode/
+.idea/
