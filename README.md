@@ -28,3 +28,13 @@ The project features a full compiler pipeline: from lexical analysis (Lexer) and
 - **Automated Visualization:** Automatically generates an `ast.dot` graph description and invokes Graphviz (`dot -Tpng ast.dot -o ast.png`) upon execution to create an `ast.png` visual diagram of your program's syntax tree.
 
 ---
+
+## ⚙️ Prerequisites & Dependencies
+
+- **C++ Compiler:** Supporting **C++23** standard:
+  - GCC $\ge$ 13 (recommended: GCC 13+)
+  - Clang $\ge$ 16 (recommended: Clang 16+)
+  - Apple Clang (Xcode $\ge$ 15, included with macOS Sonoma/Sequoia)
+- **Build System:** CMake $\ge$ 3.20 (version 3.20+ recommended for complete C++23 feature support).
+- **Unit Testing:** Google Test (fetched automatically via CMake `FetchContent`).
+- **Visualization (Optional):** [Graphviz](https://graphviz.org/) to automatically generate `ast.png` diagrams.
