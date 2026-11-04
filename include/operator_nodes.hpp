@@ -21,7 +21,6 @@ enum class BinaryOpType {
     GreaterEq // >=
 };
 
-// Computational binary operations
 class BinaryOpNode final : public Node {
 private:
     BinaryOpType op_;
@@ -55,9 +54,32 @@ public:
         }
         throw std::runtime_error("Unknown binary operator");
     }
+
+    int dump_dot(std::ostream& out, int& next_id) const override {
+        int id = next_id++;
+        std::string op_str;
+        switch (op_) {
+            case BinaryOpType::Add: op_str = "+"; break;
+            case BinaryOpType::Sub: op_str = "-"; break;
+            case BinaryOpType::Mul: op_str = "*"; break;
+            case BinaryOpType::Div: op_str = "/"; break;
+            case BinaryOpType::Mod: op_str = "%"; break;
+            case BinaryOpType::Equal: op_str = "=="; break;
+            case BinaryOpType::NotEqual: op_str = "!="; break;
+            case BinaryOpType::Less: op_str = "<"; break;
+            case BinaryOpType::Greater: op_str = ">"; break;
+            case BinaryOpType::LessEq: op_str = "<="; break;
+            case BinaryOpType::GreaterEq: op_str = ">="; break;
+        }
+        out << "    node" << id << " [label=\"Op: " << op_str << "\", shape=circle, color=orange, style=filled];\n";
+        int left_id = left_->dump_dot(out, next_id);
+        int right_id = right_->dump_dot(out, next_id);
+        out << "    node" << id << " -> node" << left_id << ";\n";
+        out << "    node" << id << " -> node" << right_id << ";\n";
+        return id;
+    }
 };
 
-// Assignment operator (x = expr)
 class AssignNode final : public Node {
 private:
     std::size_t var_id_;
@@ -72,9 +94,16 @@ public:
         ctx.set_variable(var_id_, val);
         return val;
     }
+
+    int dump_dot(std::ostream& out, int& next_id) const override {
+        int id = next_id++;
+        out << "    node" << id << " [label=\"Assign\\n(Var ID: " << var_id_ << ")\", shape=box, color=yellow, style=filled];\n";
+        int expr_id = expr_->dump_dot(out, next_id);
+        out << "    node" << id << " -> node" << expr_id << ";\n";
+        return id;
+    }
 };
 
-// Output operator to stream (print expr)
 class PrintNode final : public Node {
 private:
     NodePtr expr_;
@@ -87,9 +116,16 @@ public:
         std::cout << val << std::endl;
         return val;
     }
+
+    int dump_dot(std::ostream& out, int& next_id) const override {
+        int id = next_id++;
+        out << "    node" << id << " [label=\"Print\", shape=box, color=pink, style=filled];\n";
+        int expr_id = expr_->dump_dot(out, next_id);
+        out << "    node" << id << " -> node" << expr_id << ";\n";
+        return id;
+    }
 };
 
-// Input operator from standard stream (?)
 class ReadNode final : public Node {
 public:
     int eval(ExecutionContext& /*ctx*/) const override {
@@ -98,6 +134,12 @@ public:
             throw std::runtime_error("Failed to read integer from stdin");
         }
         return val;
+    }
+
+    int dump_dot(std::ostream& out, int& next_id) const override {
+        int id = next_id++;
+        out << "    node" << id << " [label=\"Read (?)\", shape=box, color=violet, style=filled];\n";
+        return id;
     }
 };
 

@@ -15,6 +15,7 @@ include_directories(
 add_executable(paracl_app
     src/main.cpp
     src/lexer.cpp
+    src/parser.cpp
 )
 
 include(FetchContent)

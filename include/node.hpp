@@ -5,10 +5,10 @@
 #include <memory>
 #include <stdexcept>
 #include <cstddef>
+#include <ostream>
 
 namespace paracl {
 
-// Execution context: stores the values of all variables by their numerical index
 struct ExecutionContext {
     std::vector<int> variables;
 
@@ -27,13 +27,13 @@ struct ExecutionContext {
     }
 };
 
-// Abstract base class for an AST node
 class Node {
 public:
-    virtual ~Node() = default; // Mandatory virtual destructor (RAII)
-
-    // Pure virtual method to evaluate/execute the node
+    virtual ~Node() = default;
     virtual int eval(ExecutionContext& ctx) const = 0;
+
+    // Method to dump AST structure in Graphviz DOT format
+    virtual int dump_dot(std::ostream& out, int& next_id) const = 0;
 };
 
 using NodePtr = std::unique_ptr<Node>;

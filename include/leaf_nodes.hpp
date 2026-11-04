@@ -5,7 +5,6 @@
 
 namespace paracl {
 
-// Number node (constant)
 class NumberNode final : public Node {
 private:
     int value_;
@@ -16,9 +15,14 @@ public:
     int eval(ExecutionContext& /*ctx*/) const override {
         return value_;
     }
+
+    int dump_dot(std::ostream& out, int& next_id) const override {
+        int id = next_id++;
+        out << "    node" << id << " [label=\"Number: " << value_ << "\", shape=box, color=lightblue, style=filled];\n";
+        return id;
+    }
 };
 
-// Variable node (stores an index in the context array)
 class VariableNode final : public Node {
 private:
     std::size_t var_id_;
@@ -30,6 +34,12 @@ public:
 
     int eval(ExecutionContext& ctx) const override {
         return ctx.get_variable(var_id_);
+    }
+
+    int dump_dot(std::ostream& out, int& next_id) const override {
+        int id = next_id++;
+        out << "    node" << id << " [label=\"Var ID: " << var_id_ << "\", shape=ellipse, color=lightgreen, style=filled];\n";
+        return id;
     }
 };
 

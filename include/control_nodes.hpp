@@ -7,7 +7,6 @@
 
 namespace paracl {
 
-// Compound node (block of sequential statements { stmt1; stmt2; })
 class BlockNode final : public Node {
 private:
     std::vector<NodePtr> stmts_;
@@ -28,14 +27,25 @@ public:
         }
         return last_res;
     }
+
+    int dump_dot(std::ostream& out, int& next_id) const override {
+        int id = next_id++;
+        out << "    node" << id << " [label=\"Block\", shape=box, color=lightgrey, style=filled];\n";
+        for (const auto& stmt : stmts_) {
+            if (stmt) {
+                int stmt_id = stmt->dump_dot(out, next_id);
+                out << "    node" << id << " -> node" << stmt_id << ";\n";
+            }
+        }
+        return id;
+    }
 };
 
-// Conditional statement if (cond) { then } else { else }
 class IfNode final : public Node {
 private:
     NodePtr cond_;
     NodePtr then_branch_;
-    NodePtr else_branch_; // Can be nullptr
+    NodePtr else_branch_;
 
 public:
     IfNode(NodePtr cond, NodePtr then_b, NodePtr else_b = nullptr)
@@ -51,9 +61,22 @@ public:
         }
         return 0;
     }
+
+    int dump_dot(std::ostream& out, int& next_id) const override {
+        int id = next_id++;
+        out << "    node" << id << " [label=\"If\", shape=diamond, color=coral, style=filled];\n";
+        int cond_id = cond_->dump_dot(out, next_id);
+        int then_id = then_branch_->dump_dot(out, next_id);
+        out << "    node" << id << " -> node" << cond_id << " [label=\"cond\"];\n";
+        out << "    node" << id << " -> node" << then_id << " [label=\"then\"];\n";
+        if (else_branch_) {
+            int else_id = else_branch_->dump_dot(out, next_id);
+            out << "    node" << id << " -> node" << else_id << " [label=\"else\"];\n";
+        }
+        return id;
+    }
 };
 
-// While loop while (cond) { body }
 class WhileNode final : public Node {
 private:
     NodePtr cond_;
@@ -69,6 +92,16 @@ public:
             last_res = body_->eval(ctx);
         }
         return last_res;
+    }
+
+    int dump_dot(std::ostream& out, int& next_id) const override {
+        int id = next_id++;
+        out << "    node" << id << " [label=\"While\", shape=diamond, color=gold, style=filled];\n";
+        int cond_id = cond_->dump_dot(out, next_id);
+        int body_id = body_->dump_dot(out, next_id);
+        out << "    node" << id << " -> node" << cond_id << " [label=\"cond\"];\n";
+        out << "    node" << id << " -> node" << body_id << " [label=\"body\"];\n";
+        return id;
     }
 };
 

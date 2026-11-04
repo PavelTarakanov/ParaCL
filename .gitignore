@@ -7,6 +7,9 @@ CTestTestfile.cmake
 out
 *.o
 *.d
+*.dot
+*.png
+*.pcl
 
 .DS_Store
 .vscode/
